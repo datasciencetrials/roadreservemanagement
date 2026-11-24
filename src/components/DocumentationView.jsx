@@ -9,7 +9,7 @@ export default function DocumentationView({ data }) {
         <div>
           <h2 className="section-title">Platform Documentation &amp; Technical Standards</h2>
           <p className="section-desc">
-            Reference guide for the Ministry of Works and Transport (MoWT), Department of National Roads, Road Reserve Management Platform.
+            Reference guide for the NATIONAL TRANSPORT GIS ENTERPRISE (National Road Network), NATIONAL ROAD NETWORK ADMINISTRATION, Road Reserve Management Platform.
           </p>
         </div>
         <span className="badge-pill green">View-Only Public Intelligence</span>
@@ -19,13 +19,13 @@ export default function DocumentationView({ data }) {
         <div className="card">
           <h3 className="card-title">1. Statutory Mandate &amp; View-Only Scope</h3>
           <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: 0 }}>
-            This platform operates as a strictly view-only executive and engineering dashboard under the Ministry of Works and Transport (MoWT), Department of National Roads, Division of Design and Network Engineering. It presents historic road reserve baselines, current network condition registers, and Vision 2040 projections without user data-entry forms, login gates, or administrative overrides.
+            This platform operates as a strictly view-only executive and engineering dashboard under the NATIONAL TRANSPORT GIS ENTERPRISE (National Road Network), NATIONAL ROAD NETWORK ADMINISTRATION, NETWORK ENGINEERING AND PLANNING DIVISION. It presents historic road reserve baselines, current network condition registers, and Vision 2040 projections without user data-entry forms, login gates, or administrative overrides.
           </p>
           <ul style={{ paddingLeft: '18px', margin: '8px 0 0 0', fontSize: '0.88rem', color: 'var(--text-primary)' }}>
             <li>Authoritative National Road Network extent: <strong>21,284.02 km</strong> (23/09/2026 register).</li>
             <li>Surface split: <strong>6,406.69 km</strong> Paved (30.10%) and <strong>14,877.33 km</strong> Unpaved (69.90%).</li>
             <li>Structures register (01/10/2026): <strong>552 Bridges</strong> and <strong>452 Major Culverts</strong> reported in separate tables.</li>
-            <li>Administrative coverage: <strong>6 Maintenance Regions</strong> and <strong>23 Maintenance Stations</strong>.</li>
+            <li>Administrative coverage: <strong>6 Maintenance Regions</strong> (Central, Eastern, North Eastern, Northern, Southern, Western) and <strong>23 Maintenance Stations</strong>.</li>
           </ul>
         </div>
 
@@ -131,7 +131,7 @@ export default function DocumentationView({ data }) {
                 </tr>
                 <tr>
                   <th>Geospatial Basemap</th>
-                  <td>Esri World Imagery + Hybrid Labels (World Boundaries and Places &amp; Transportation)</td>
+                  <td>Esri World Imagery + Hybrid Reference Labels (World Boundaries and Places)</td>
                 </tr>
                 <tr>
                   <th>Vision 2040 Horizon</th>
@@ -156,13 +156,13 @@ export default function DocumentationView({ data }) {
               <tbody>
                 <tr>
                   <td>1</td>
-                  <td><strong>MoWT</strong></td>
-                  <td>Ministry of Works and Transport</td>
+                  <td><strong>National Road Network</strong></td>
+                  <td>NATIONAL TRANSPORT GIS ENTERPRISE</td>
                 </tr>
                 <tr>
                   <td>2</td>
                   <td><strong>DNR</strong></td>
-                  <td>Department of National Roads</td>
+                  <td>NATIONAL ROAD NETWORK ADMINISTRATION</td>
                 </tr>
                 <tr>
                   <td>3</td>

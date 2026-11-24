@@ -20,10 +20,8 @@ export default function OverviewView({ data, onNavigate }) {
   const [selectedYear, setSelectedYear] = useState(2026);
   const { summary, functional_classes } = data;
 
-  // Vision 2040 projection model anchored on authoritative 2026 baseline (21,284.02 km)
   const projection = useMemo(() => {
-    const t = (selectedYear - 2016) / (2040 - 2016); // 0.0 in 2016, 0.4167 in 2026, 1.0 in 2040
-    // Anchors: 2016 ~ 4,150 km paved; 2026 = 6,406.69 km paved; 2040 Vision 2040 target = 12,800.00 km paved
+    const t = (selectedYear - 2016) / (2040 - 2016);
     let pavedKm = 6406.69;
     let goodPct = 59.20;
     let fairPct = 36.82;
@@ -52,7 +50,11 @@ export default function OverviewView({ data, onNavigate }) {
 
     return {
       year: selectedYear,
-      label: selectedYear === 2026 ? 'Current Baseline (2026)' : selectedYear < 2026 ? `Historic (${selectedYear})` : `Vision 2040 Projection (${selectedYear})`,
+      label: selectedYear === 2026
+        ? 'Current Baseline (2026)'
+        : selectedYear < 2026
+          ? `Historic (${selectedYear})`
+          : `Vision 2040 Projection (${selectedYear})`,
       pavedKm: Number(pavedKm.toFixed(2)),
       unpavedKm: Number(unpavedKm.toFixed(2)),
       pavedPct: Number(pavedPct.toFixed(2)),
@@ -68,23 +70,23 @@ export default function OverviewView({ data, onNavigate }) {
   const trajectoryData = useMemo(() => {
     return TIMELINE_YEARS.map((yr) => {
       if (yr === 2026) {
-        return { year: String(yr), Paved: 6406.69, Unpaved: 14877.33, ProtectedPct: 74.5 };
+        return { year: String(yr), Paved: 6406.69, Unpaved: 14877.33 };
       }
       if (yr < 2026) {
         const f = (yr - 2016) / 10;
         const p = Number((4150 + f * (6406.69 - 4150)).toFixed(2));
-        return { year: String(yr), Paved: p, Unpaved: Number((21284.02 - p).toFixed(2)), ProtectedPct: Number((58 + f * 16.5).toFixed(1)) };
+        return { year: String(yr), Paved: p, Unpaved: Number((21284.02 - p).toFixed(2)) };
       }
       const f = (yr - 2026) / 14;
       const p = Number((6406.69 + f * (12800 - 6406.69)).toFixed(2));
-      return { year: String(yr), Paved: p, Unpaved: Number((21284.02 - p).toFixed(2)), ProtectedPct: Number((74.5 + f * 21.5).toFixed(1)) };
+      return { year: String(yr), Paved: p, Unpaved: Number((21284.02 - p).toFixed(2)) };
     });
   }, []);
 
   const conditionPieData = [
-    { name: 'Good', value: projection.goodPct, color: COLORS.green },
-    { name: 'Fair', value: projection.fairPct, color: COLORS.amber },
-    { name: 'Poor', value: projection.poorPct, color: COLORS.red }
+    { name: 'Good', value: projection.goodPct, km: Number(((projection.goodPct / 100) * 21284.02).toFixed(2)), color: COLORS.green },
+    { name: 'Fair', value: projection.fairPct, km: Number(((projection.fairPct / 100) * 21284.02).toFixed(2)), color: COLORS.blue },
+    { name: 'Poor', value: projection.poorPct, km: Number(((projection.poorPct / 100) * 21284.02).toFixed(2)), color: COLORS.red }
   ];
 
   return (
@@ -147,7 +149,7 @@ export default function OverviewView({ data, onNavigate }) {
         </div>
       </div>
 
-      {/* Executive KPI Cards */}
+      {/* Executive KPI Cards (Bridges and Major Culverts strictly separate) */}
       <div className="kpi-grid">
         <div className="kpi-card">
           <span className="kpi-label">National Road Network</span>
@@ -165,13 +167,18 @@ export default function OverviewView({ data, onNavigate }) {
           <span className="kpi-meta">{projection.unpavedPct.toFixed(2)}% of National Network</span>
         </div>
         <div className="kpi-card">
-          <span className="kpi-label">Bridges &amp; Major Culverts</span>
-          <span className="kpi-value" style={{ color: COLORS.purple }}>552 / 452</span>
-          <span className="kpi-meta">552 Bridges, 452 Major Culverts (01/10/2026)</span>
+          <span className="kpi-label">Bridges Register</span>
+          <span className="kpi-value" style={{ color: COLORS.purple }}>552</span>
+          <span className="kpi-meta">247 Good, 13 Critical (01/10/2026)</span>
         </div>
         <div className="kpi-card">
-          <span className="kpi-label">Reserve Demarcation Coverage</span>
-          <span className="kpi-value" style={{ color: COLORS.teal }}>{projection.reserveProtectedPct}%</span>
+          <span className="kpi-label">Major Culverts Register</span>
+          <span className="kpi-value" style={{ color: COLORS.teal }}>452</span>
+          <span className="kpi-meta">403 Good, 4 Critical (01/10/2026)</span>
+        </div>
+        <div className="kpi-card">
+          <span className="kpi-label">Reserve Demarcation</span>
+          <span className="kpi-value" style={{ color: COLORS.blue }}>{projection.reserveProtectedPct}%</span>
           <span className="kpi-meta">Traffic Multiplier: {projection.trafficIndex}x vs 2016</span>
         </div>
       </div>
@@ -179,20 +186,21 @@ export default function OverviewView({ data, onNavigate }) {
       {/* Charts Row */}
       <div className="grid-2">
         <div className="card">
-          <h3 className="card-title">Functional Class Extent &amp; Reserve Width</h3>
-          <p className="card-subtitle">Authoritative network length (km) by functional class (23/09/2026)</p>
+          <h3 className="card-title">Functional Class Extent by Surface Type</h3>
+          <p className="card-subtitle">Authoritative network length (km) as at 23/09/2026</p>
           <div style={{ width: '100%', height: 290 }}>
             <ResponsiveContainer>
-              <BarChart data={functional_classes} margin={{ top: 10, right: 16, left: 0, bottom: 10 }}>
+              <BarChart data={functional_classes} margin={{ top: 10, right: 16, left: 4, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
                 <XAxis dataKey="code" tick={{ fill: '#0F172A', fontSize: 12 }} />
                 <YAxis tick={{ fill: '#475569', fontSize: 12 }} />
                 <Tooltip
                   contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 10, color: '#0F172A' }}
-                  formatter={(value) => [`${Number(value).toLocaleString('en-GB')} km`, 'Length']}
+                  formatter={(value, name) => [`${Number(value).toLocaleString('en-GB', { minimumFractionDigits: 2 })} km`, name]}
                 />
+                <Legend />
                 <Bar dataKey="paved_km" name="Paved (km)" stackId="a" fill={COLORS.blue} radius={[0, 0, 0, 0]} />
-                <Bar dataKey="unpaved_km" name="Unpaved (km)" stackId="a" fill={COLORS.teal} radius={[6, 6, 0, 0]} />
+                <Bar dataKey="unpaved_km" name="Unpaved (km)" stackId="a" fill={COLORS.amber} radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -201,7 +209,7 @@ export default function OverviewView({ data, onNavigate }) {
         <div className="card">
           <h3 className="card-title">Network Surface Condition ({selectedYear})</h3>
           <p className="card-subtitle">Assessed via MOBICAP(Road condition assesment tool) and ROMDAS(Roughness and rutting machine based testing)</p>
-          <div style={{ width: '100%', height: 290 }}>
+          <div style={{ width: '100%', height: 235 }}>
             <ResponsiveContainer>
               <PieChart>
                 <Pie
@@ -210,10 +218,9 @@ export default function OverviewView({ data, onNavigate }) {
                   nameKey="name"
                   cx="50%"
                   cy="50%"
-                  innerRadius={62}
-                  outerRadius={105}
+                  innerRadius={58}
+                  outerRadius={95}
                   paddingAngle={3}
-                  label={({ name, value }) => `${name}: ${value}%`}
                 >
                   {conditionPieData.map((entry) => (
                     <Cell key={entry.name} fill={entry.color} />
@@ -221,11 +228,18 @@ export default function OverviewView({ data, onNavigate }) {
                 </Pie>
                 <Tooltip
                   contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 10, color: '#0F172A' }}
-                  formatter={(val) => [`${val}%`, 'Share']}
+                  formatter={(val, name) => [`${val}%`, name]}
                 />
-                <Legend />
               </PieChart>
             </ResponsiveContainer>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap', marginTop: '6px' }}>
+            {conditionPieData.map((item) => (
+              <span key={item.name} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.84rem', fontWeight: 600, color: '#0F172A' }}>
+                <span style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: item.color, display: 'inline-block' }} />
+                {item.name}: {item.value.toFixed(2)}%
+              </span>
+            ))}
           </div>
         </div>
       </div>
@@ -240,7 +254,10 @@ export default function OverviewView({ data, onNavigate }) {
               <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
               <XAxis dataKey="year" tick={{ fill: '#0F172A', fontSize: 12 }} />
               <YAxis tick={{ fill: '#475569', fontSize: 12 }} />
-              <Tooltip contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 10, color: '#0F172A' }} />
+              <Tooltip
+                contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 10, color: '#0F172A' }}
+                formatter={(val, name) => [`${Number(val).toLocaleString('en-GB', { minimumFractionDigits: 2 })} km`, name]}
+              />
               <Legend />
               <Line type="monotone" dataKey="Paved" name="Paved Extent (km)" stroke={COLORS.green} strokeWidth={3} dot={{ r: 4 }} />
               <Line type="monotone" dataKey="Unpaved" name="Unpaved Extent (km)" stroke={COLORS.amber} strokeWidth={3} dot={{ r: 4 }} />
@@ -280,6 +297,16 @@ export default function OverviewView({ data, onNavigate }) {
                   <td>{fc.setback_m} m each side</td>
                 </tr>
               ))}
+              <tr style={{ backgroundColor: '#F8FAFC', fontWeight: 700 }}>
+                <td></td>
+                <td>National Road Network Total</td>
+                <td>21,284.02 km</td>
+                <td>100.00%</td>
+                <td>6,406.69 km</td>
+                <td>14,877.33 km</td>
+                <td>30 m to 80 m</td>
+                <td>15 m to 40 m each side</td>
+              </tr>
             </tbody>
           </table>
         </div>

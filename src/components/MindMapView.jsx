@@ -5,6 +5,7 @@ const MINDMAP_BRANCHES = [
     id: 'setbacks',
     title: 'Corridor Setback Standards',
     color: '#0071E3',
+    textColor: '#005BBF',
     soft: '#EFF6FF',
     summary: 'Statutory road reserve widths and centreline setbacks protecting national corridors from encroachment.',
     metrics: [
@@ -24,6 +25,7 @@ const MINDMAP_BRANCHES = [
     id: 'survey',
     title: 'Survey & Telemetry Tools',
     color: '#0D9488',
+    textColor: '#0F766E',
     soft: '#CCFBF1',
     summary: 'Standardised condition monitoring across the 21,284.02 km National Road Network.',
     metrics: [
@@ -41,6 +43,7 @@ const MINDMAP_BRANCHES = [
     id: 'structures',
     title: 'Structures & Drainage',
     color: '#7C3AED',
+    textColor: '#5B21B6',
     soft: '#EDE9FE',
     summary: 'Separate statutory registers for Bridges (552) and Major Culverts (452) as at 01/10/2026.',
     metrics: [
@@ -56,6 +59,7 @@ const MINDMAP_BRANCHES = [
     id: 'governance',
     title: 'Wayleave & Reserve Protection',
     color: '#D97706',
+    textColor: '#92400E',
     soft: '#FEF3C7',
     summary: 'View-only policy governance for utility corridors, signage setbacks, and access control.',
     metrics: [
@@ -72,6 +76,7 @@ const MINDMAP_BRANCHES = [
     id: 'regions',
     title: '6 Maintenance Regions',
     color: '#16A34A',
+    textColor: '#166534',
     soft: '#DCFCE7',
     summary: 'Operational administration across 6 Maintenance Regions and 23 Maintenance Stations.',
     metrics: [
@@ -91,6 +96,7 @@ const MINDMAP_BRANCHES = [
     id: 'vision2040',
     title: 'Vision 2040 Strategic Targets',
     color: '#DC2626',
+    textColor: '#991B1B',
     soft: '#FEE2E2',
     summary: 'Long-term corridor capacity, paving expansion, and reserve preservation through 2040.',
     metrics: [
@@ -159,7 +165,7 @@ export default function MindMapView() {
               fontSize: '1.05rem'
             }}
           >
-            MoWT Road Reserve Management Hub &bull; 21,284.02 km
+            National Road Network Road Reserve Management Hub &bull; 21,284.02 km
             <div style={{ fontSize: '0.78rem', fontWeight: 500, opacity: 0.92, marginTop: '3px' }}>
               6,406.69 km Paved | 14,877.33 km Unpaved | 552 Bridges | 452 Major Culverts | Vision 2040
             </div>
@@ -234,7 +240,7 @@ export default function MindMapView() {
       <div className="card" style={{ borderLeft: `4px solid ${activeBranch.color}` }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
           <div>
-            <span className="badge-pill" style={{ background: activeBranch.soft, color: activeBranch.color, borderColor: activeBranch.color }}>
+            <span className="badge-pill" style={{ background: activeBranch.soft, color: activeBranch.textColor || activeBranch.color, borderColor: activeBranch.color }}>
               Selected Domain
             </span>
             <h3 style={{ margin: '8px 0 2px 0', fontSize: '1.2rem' }}>
@@ -245,7 +251,7 @@ export default function MindMapView() {
 
         {activeChild ? (
           <div style={{ background: 'var(--bg-subtle)', border: '1px solid var(--border-hairline)', borderRadius: '12px', padding: '14px 16px', marginBottom: '14px' }}>
-            <strong style={{ fontSize: '0.92rem', color: activeBranch.color }}>{activeChild.label}</strong>
+            <strong style={{ fontSize: '0.92rem', color: activeBranch.textColor || activeBranch.color }}>{activeChild.label}</strong>
             <p style={{ margin: '4px 0 0 0', fontSize: '0.9rem', color: 'var(--text-primary)' }}>{activeChild.detail}</p>
           </div>
         ) : (

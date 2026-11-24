@@ -23,11 +23,11 @@ export default function App() {
       <header className="top-header">
         <div className="header-inner">
           <div className="brand-block">
-            <img src={mowtLogo} alt="Ministry of Works and Transport" className="brand-logo" />
+            <img src={mowtLogo} alt="NATIONAL TRANSPORT GIS ENTERPRISE" className="brand-logo" />
             <div>
               <h1 className="brand-title">Road Reserve Management</h1>
               <p className="brand-subtitle">
-                Ministry of Works and Transport &bull; Department of National Roads &bull; 21,284.02 km
+                NATIONAL TRANSPORT GIS ENTERPRISE &bull; NATIONAL ROAD NETWORK ADMINISTRATION &bull; 21,284.02 km
               </p>
             </div>
           </div>
@@ -63,7 +63,7 @@ export default function App() {
       <footer className="app-footer">
         <div className="footer-inner">
           <span>
-            Ministry of Works and Transport (MoWT) &bull; Department of National Roads &bull; Division of Design and Network Engineering
+            NATIONAL TRANSPORT GIS ENTERPRISE (National Road Network) &bull; NATIONAL ROAD NETWORK ADMINISTRATION &bull; NETWORK ENGINEERING AND PLANNING DIVISION
           </span>
           <span>
             Authoritative Register: 21,284.02 km | 552 Bridges | 452 Major Culverts | Updated: {networkData.summary.last_refreshed}

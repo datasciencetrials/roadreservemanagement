@@ -1,7 +1,16 @@
 import React, { useState, useMemo } from 'react';
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
+  BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts';
+
+const CONDITION_COLORS = {
+  Good: '#16A34A',
+  Satisfactory: '#0071E3',
+  Marginal: '#D97706',
+  Poor: '#DC2626',
+  Critical: '#7F1D1D',
+  'Under Construction': '#7C3AED'
+};
 
 const COLORS = {
   blue: '#0071E3',
@@ -36,6 +45,14 @@ export default function AnalyticsView({ data }) {
 
   const displayedCorridors = showAllCorridors ? filteredCorridors : filteredCorridors.slice(0, 40);
 
+  const handleResetFilters = () => {
+    setSearch('');
+    setClassFilter('All');
+    setSurfaceFilter('All');
+    setConditionFilter('All');
+    setShowAllCorridors(false);
+  };
+
   const exportCsv = () => {
     const headers = [
       'Road Name', 'Functional Class', 'Surface Type', 'Length (km)',
@@ -60,7 +77,7 @@ export default function AnalyticsView({ data }) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'mowt_road_reserve_corridors_2026_2040.csv';
+    a.download = 'National Road Network Road Reserve Corridors 2026 to 2040.csv';
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -71,7 +88,7 @@ export default function AnalyticsView({ data }) {
         <div>
           <h2 className="section-title">Corridor &amp; Structures Analytics</h2>
           <p className="section-desc">
-            Disaggregated pavement condition from MOBICAP(Road condition assesment tool) and ROMDAS(Roughness and rutting machine based testing), with Bridges (552) and Major Culverts (452) reported separately.
+            Disaggregated pavement condition from MOBICAP(Road condition assesment tool) and ROMDAS(Roughness and rutting machine based testing), with Bridges (552) and Major Culverts (452) reported in separate tables and charts.
           </p>
         </div>
         <button type="button" className="btn-primary" onClick={exportCsv}>
@@ -79,19 +96,23 @@ export default function AnalyticsView({ data }) {
         </button>
       </div>
 
-      {/* Bridges vs Major Culverts Separate Charts */}
+      {/* Bridges vs Major Culverts Separate Condition Charts & Tables */}
       <div className="grid-2">
         <div className="card">
-          <h3 className="card-title">Table &amp; Chart 1: Bridges Condition Profile (552 Total)</h3>
+          <h3 className="card-title">Bridges Condition Profile (552 Total)</h3>
           <p className="card-subtitle">Authoritative bridge register as at 01/10/2026</p>
           <div style={{ width: '100%', height: 240 }}>
             <ResponsiveContainer>
-              <BarChart data={data.bridge_conditions} margin={{ top: 10, right: 16, left: 0, bottom: 10 }}>
+              <BarChart data={data.bridge_conditions} margin={{ top: 10, right: 16, left: 0, bottom: 16 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
-                <XAxis dataKey="condition" tick={{ fill: '#0F172A', fontSize: 11 }} />
+                <XAxis dataKey="condition" tick={{ fill: '#0F172A', fontSize: 10 }} interval={0} angle={-15} textAnchor="end" height={44} />
                 <YAxis tick={{ fill: '#475569', fontSize: 11 }} />
                 <Tooltip contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 10, color: '#0F172A' }} />
-                <Bar dataKey="count" name="Bridges" fill={COLORS.blue} radius={[6, 6, 0, 0]} />
+                <Bar dataKey="count" name="Bridges" radius={[6, 6, 0, 0]}>
+                  {data.bridge_conditions.map((entry) => (
+                    <Cell key={entry.condition} fill={CONDITION_COLORS[entry.condition] || COLORS.blue} />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -120,16 +141,20 @@ export default function AnalyticsView({ data }) {
         </div>
 
         <div className="card">
-          <h3 className="card-title">Table &amp; Chart 2: Major Culverts Condition Profile (452 Total)</h3>
+          <h3 className="card-title">Major Culverts Condition Profile (452 Total)</h3>
           <p className="card-subtitle">Authoritative major culvert register as at 01/10/2026</p>
           <div style={{ width: '100%', height: 240 }}>
             <ResponsiveContainer>
-              <BarChart data={data.culvert_conditions} margin={{ top: 10, right: 16, left: 0, bottom: 10 }}>
+              <BarChart data={data.culvert_conditions} margin={{ top: 10, right: 16, left: 0, bottom: 16 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
-                <XAxis dataKey="condition" tick={{ fill: '#0F172A', fontSize: 11 }} />
+                <XAxis dataKey="condition" tick={{ fill: '#0F172A', fontSize: 10 }} interval={0} angle={-15} textAnchor="end" height={44} />
                 <YAxis tick={{ fill: '#475569', fontSize: 11 }} />
                 <Tooltip contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 10, color: '#0F172A' }} />
-                <Bar dataKey="count" name="Major Culverts" fill={COLORS.teal} radius={[6, 6, 0, 0]} />
+                <Bar dataKey="count" name="Major Culverts" radius={[6, 6, 0, 0]}>
+                  {data.culvert_conditions.map((entry) => (
+                    <Cell key={entry.condition} fill={CONDITION_COLORS[entry.condition] || COLORS.teal} />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -158,22 +183,38 @@ export default function AnalyticsView({ data }) {
         </div>
       </div>
 
-      {/* Regional Structures Distribution */}
-      <div className="card" style={{ marginBottom: '24px' }}>
-        <h3 className="card-title">Regional Structures Distribution Across 6 Maintenance Regions</h3>
-        <p className="card-subtitle">Bridges (552) and Major Culverts (452) by MoWT Maintenance Region</p>
-        <div style={{ width: '100%', height: 260 }}>
-          <ResponsiveContainer>
-            <BarChart data={data.regions} margin={{ top: 10, right: 20, left: 0, bottom: 10 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
-              <XAxis dataKey="region_name" tick={{ fill: '#0F172A', fontSize: 12 }} />
-              <YAxis tick={{ fill: '#475569', fontSize: 12 }} />
-              <Tooltip contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 10, color: '#0F172A' }} />
-              <Legend />
-              <Bar dataKey="bridges_count" name="Bridges" fill={COLORS.blue} radius={[6, 6, 0, 0]} />
-              <Bar dataKey="major_culverts_count" name="Major Culverts" fill={COLORS.purple} radius={[6, 6, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+      {/* Regional Distribution: Strictly Separate Charts for Bridges and Major Culverts */}
+      <div className="grid-2">
+        <div className="card">
+          <h3 className="card-title">Bridges by Maintenance Region (552 Total)</h3>
+          <p className="card-subtitle">Distribution across the 6 National Road Network Maintenance Regions (01/10/2026)</p>
+          <div style={{ width: '100%', height: 250 }}>
+            <ResponsiveContainer>
+              <BarChart data={data.regions} margin={{ top: 10, right: 16, left: 0, bottom: 14 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                <XAxis dataKey="region_name" tick={{ fill: '#0F172A', fontSize: 11 }} interval={0} angle={-12} textAnchor="end" height={40} />
+                <YAxis tick={{ fill: '#475569', fontSize: 11 }} />
+                <Tooltip contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 10, color: '#0F172A' }} />
+                <Bar dataKey="bridges_count" name="Bridges" fill={COLORS.blue} radius={[6, 6, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div className="card">
+          <h3 className="card-title">Major Culverts by Maintenance Region (452 Total)</h3>
+          <p className="card-subtitle">Distribution across the 6 National Road Network Maintenance Regions (01/10/2026)</p>
+          <div style={{ width: '100%', height: 250 }}>
+            <ResponsiveContainer>
+              <BarChart data={data.regions} margin={{ top: 10, right: 16, left: 0, bottom: 14 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                <XAxis dataKey="region_name" tick={{ fill: '#0F172A', fontSize: 11 }} interval={0} angle={-12} textAnchor="end" height={40} />
+                <YAxis tick={{ fill: '#475569', fontSize: 11 }} />
+                <Tooltip contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 10, color: '#0F172A' }} />
+                <Bar dataKey="major_culverts_count" name="Major Culverts" fill={COLORS.teal} radius={[6, 6, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
 
@@ -186,6 +227,9 @@ export default function AnalyticsView({ data }) {
               Filtered extent: <strong>{filteredKm.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} km</strong> ({((filteredKm / 21284.02) * 100).toFixed(2)}% of 21,284.02 km National Road Network)
             </p>
           </div>
+          <button type="button" className="btn-secondary" onClick={handleResetFilters}>
+            Reset Filters
+          </button>
         </div>
 
         <div className="filter-bar" style={{ boxShadow: 'none', padding: '10px 12px', marginBottom: '16px', background: 'var(--bg-subtle)' }}>
@@ -245,7 +289,7 @@ export default function AnalyticsView({ data }) {
                   <td>{c.surface_type}</td>
                   <td>{c.length_km.toLocaleString('en-GB', { minimumFractionDigits: 2 })} km</td>
                   <td>
-                    <span className={`badge-pill ${c.condition_band === 'Good' ? 'green' : c.condition_band === 'Poor' ? 'red' : 'amber'}`}>
+                    <span className={`badge-pill ${c.condition_band === 'Good' ? 'green' : c.condition_band === 'Poor' ? 'red' : 'blue'}`}>
                       {c.condition_band}
                     </span>
                   </td>
