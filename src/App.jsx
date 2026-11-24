@@ -5,7 +5,7 @@ import ReserveMapView from './components/ReserveMapView';
 import AnalyticsView from './components/AnalyticsView';
 import MindMapView from './components/MindMapView';
 import DocumentationView from './components/DocumentationView';
-import mowtLogo from './assets/mowt_logo.png';
+import enterpriseLogo from './assets/enterprise_logo.svg';
 
 const TABS = [
   { id: 'overview', label: 'Overview & Vision 2040' },
@@ -23,11 +23,11 @@ export default function App() {
       <header className="top-header">
         <div className="header-inner">
           <div className="brand-block">
-            <img src={mowtLogo} alt="NATIONAL TRANSPORT GIS ENTERPRISE" className="brand-logo" />
+            <img src={enterpriseLogo} alt="Road Reserve Management | National Road Network Enterprise" className="brand-logo" />
             <div>
               <h1 className="brand-title">Road Reserve Management</h1>
               <p className="brand-subtitle">
-                NATIONAL TRANSPORT GIS ENTERPRISE &bull; NATIONAL ROAD NETWORK ADMINISTRATION &bull; 21,284.02 km
+                NATIONAL ROAD NETWORK ENTERPRISE &bull; AUTHORITATIVE REGISTER &bull; 21,284.02 km
               </p>
             </div>
           </div>
@@ -63,7 +63,7 @@ export default function App() {
       <footer className="app-footer">
         <div className="footer-inner">
           <span>
-            NATIONAL TRANSPORT GIS ENTERPRISE (National Road Network) &bull; NATIONAL ROAD NETWORK ADMINISTRATION &bull; NETWORK ENGINEERING AND PLANNING DIVISION
+            NATIONAL ROAD NETWORK ENTERPRISE &bull; NETWORK ENGINEERING AND PLANNING DIVISION
           </span>
           <span>
             Authoritative Register: 21,284.02 km | 552 Bridges | 452 Major Culverts | Updated: {networkData.summary.last_refreshed}

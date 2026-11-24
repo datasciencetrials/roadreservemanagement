@@ -114,7 +114,12 @@ export default function ReserveMapView({ data }) {
     roadsLayerRef.current = roadsGroup;
     structuresLayerRef.current = structuresGroup;
 
+    const resizeTimer = setTimeout(() => {
+      map.invalidateSize();
+    }, 100);
+
     return () => {
+      clearTimeout(resizeTimer);
       map.remove();
       mapInstanceRef.current = null;
       roadsLayerRef.current = null;

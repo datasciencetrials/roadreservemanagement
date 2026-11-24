@@ -9,7 +9,7 @@ export default function DocumentationView({ data }) {
         <div>
           <h2 className="section-title">Platform Documentation &amp; Technical Standards</h2>
           <p className="section-desc">
-            Reference guide for the NATIONAL TRANSPORT GIS ENTERPRISE (National Road Network), NATIONAL ROAD NETWORK ADMINISTRATION, Road Reserve Management Platform.
+            Reference guide for the National Road Network Enterprise, Road Reserve Management Platform.
           </p>
         </div>
         <span className="badge-pill green">View-Only Public Intelligence</span>
@@ -19,7 +19,7 @@ export default function DocumentationView({ data }) {
         <div className="card">
           <h3 className="card-title">1. Statutory Mandate &amp; View-Only Scope</h3>
           <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: 0 }}>
-            This platform operates as a strictly view-only executive and engineering dashboard under the NATIONAL TRANSPORT GIS ENTERPRISE (National Road Network), NATIONAL ROAD NETWORK ADMINISTRATION, NETWORK ENGINEERING AND PLANNING DIVISION. It presents historic road reserve baselines, current network condition registers, and Vision 2040 projections without user data-entry forms, login gates, or administrative overrides.
+            This platform operates as a strictly view-only executive and engineering dashboard under the National Road Network Enterprise, Network Engineering and Planning Division. It presents historic road reserve baselines, current network condition registers, and Vision 2040 projections without user data-entry forms, login gates, or administrative overrides.
           </p>
           <ul style={{ paddingLeft: '18px', margin: '8px 0 0 0', fontSize: '0.88rem', color: 'var(--text-primary)' }}>
             <li>Authoritative National Road Network extent: <strong>21,284.02 km</strong> (23/09/2026 register).</li>
@@ -156,13 +156,13 @@ export default function DocumentationView({ data }) {
               <tbody>
                 <tr>
                   <td>1</td>
-                  <td><strong>National Road Network</strong></td>
-                  <td>NATIONAL TRANSPORT GIS ENTERPRISE</td>
+                  <td><strong>NRN</strong></td>
+                  <td>National Road Network</td>
                 </tr>
                 <tr>
                   <td>2</td>
-                  <td><strong>DNR</strong></td>
-                  <td>NATIONAL ROAD NETWORK ADMINISTRATION</td>
+                  <td><strong>ROW</strong></td>
+                  <td>Right of Way (Road Reserve Corridor)</td>
                 </tr>
                 <tr>
                   <td>3</td>
